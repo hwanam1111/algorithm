@@ -24,12 +24,17 @@
 
     예제 #2
     3번 학생이 2번 학생이나 4번 학생에게 체육복을 빌려주면 학생 4명이 체육수업을 들을 수 있습니다.
+
+
+    --------------
+    제한사항에 '남은 체육복이 하나이기에 다른 학생에게는 체육복을 빌려줄 수 없습니다.'
+    해당 부분을 다시 작업하여 커밋.
 */
 
 function solution(n, lost, reserve) {
     var answer = 0;
-    let notLost = n - lost.length;
-    let rent = [];
+    var notLost = n - lost.length;
+    var rent = [];
 
     for ( let i = 0; i < lost.length; i++ ) {
         for ( let j = 0; j < reserve.length; j++ ) {
@@ -41,26 +46,27 @@ function solution(n, lost, reserve) {
                 break;
             }
             else if ( lost[i] == reserve[j] - 1) {
-                rent.push(lost[i]);
-                lost[i] = -1;
-                reserve[j] = -1;
-
-                break;
+                if ( lost[i + 1] != reserve[j] ) {
+                    rent.push(lost[i]);
+                    lost[i] = -1;
+                    reserve[j] = -1;
+                    
+                    break;
+                }
+                
             }
             else if ( lost[i] == reserve[j] + 1 ) {
-                rent.push(lost[i]);
-                lost[i] = -1;
-                reserve[j] = -1;
+                if ( lost[i] != reserve[j + 1] ) {
+                    rent.push(lost[i]);
+                    lost[i] = -1;
+                    reserve[j] = -1;
+                    
+                    break;
+                }
 
-                break;
             }
         }
     }
-
-    rent = rent.reduce((acc,curr) => acc.includes(curr) ? acc : [...acc,curr],[]);
-    rent = rent.filter((el) => {
-        return el != null
-    });
 
     answer = notLost + rent.length;
 
